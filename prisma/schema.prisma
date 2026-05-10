@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  balance      Int      @default(1000)
+  createdAt    DateTime @default(now())
+
+  totalWagered Int @default(0)
+  totalWon     Int @default(0)
+  netProfit    Int @default(0)
+
+  bets Bet[]
+}
+
+model Bet {
+  id        String   @id @default(uuid())
+  amount    Int
+  type      String   // тип ставки: number, color, parity, dozen, half
+  value     String   // значение (например "7", "red", "even", "1", "1-18")
+  payout    Int?     // коэффициент выплаты (заполняется после подведения итогов)
+  won       Boolean? // выиграла ли ставка (null – до завершения раунда)
+  createdAt DateTime @default(now())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  roundId   String
+  round     Round    @relation(fields: [roundId], references: [id])
+}
+
+model Round {
+  id        String   @id @default(uuid())
+  result    Int      // выпавшее число (0–36)
+  createdAt DateTime @default(now())
+  bets      Bet[]
+}
