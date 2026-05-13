@@ -35,7 +35,7 @@ export default function LeaderboardPage() {
           <tr className="bg-gray-700 text-left">
             <th className="p-2">#</th>
             <th className="p-2">Игрок</th>
-            <th className="p-2">Ставок</th>
+            <th className="p-2">Сумма ставок</th>
             <th className="p-2">Выигрыш</th>
             <th className="p-2">Прибыль</th>
           </tr>
